@@ -21,7 +21,7 @@ philosopherNumber int
 
 var c1 = make(chan int,1)
 var c2 = make(chan int,1)
-func getPermissionFromHost(p *Philosopher, wg2 *sync.WaitGroup){
+func getPermissionFromHost(p Philosopher, wg2 *sync.WaitGroup){
     select {
             case   <-c1:
                         fmt.Println("received on c1 by philosopher", p.philosopherNumber)
@@ -36,7 +36,7 @@ func getPermissionFromHost(p *Philosopher, wg2 *sync.WaitGroup){
 func (p Philosopher) philosophersEat(wg1 *sync.WaitGroup){
 var wg2 sync.WaitGroup
 wg2.Add(1)
-  go getPermissionFromHost(&p, &wg2)
+  go getPermissionFromHost(p, &wg2)
 wg2.Wait()
 //fmt.Println("------------------------------- start")
  for i:=0;i<3;i++{
@@ -50,7 +50,7 @@ wg2.Wait()
    }
 //fmt.Println("-------------------------------end")
       select{
-        case c1 <- 2:
+      case c1 <- 1:
                       fmt.Println("send to c1 by philosopher", p.philosopherNumber)
         case c2 <- 2:
                       fmt.Println("send to c2 by philosopher", p.philosopherNumber)
